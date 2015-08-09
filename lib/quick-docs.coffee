@@ -19,9 +19,6 @@ module.exports =
 
     deactivate: ->
       @messages.map (msg) -> msg.destroy()
-      
-      substr
-      strstr
 
     serialize: ->
       return "{}"
@@ -41,14 +38,7 @@ module.exports =
         if funx?.length
             console.log funx
             resp = @get_info(funx, range)
-            # console.log resp
-            # 
-            # if resp.is_ok    
-            #     @messages.push @messenger.message
-            #         range: range
-            #         text: resp.call
-            #         suggestion: resp.desc
-
+            
         else
             @messages.push @messenger.message
                 range: range
