@@ -16,7 +16,8 @@ module.exports =
     
       @messenger = null
       @messages = []
-
+      @ranges = []
+      
     deactivate: ->
       @messages.map (msg) -> msg.destroy()
 
@@ -24,27 +25,28 @@ module.exports =
       return "{}"
 
     consumeInlineMessenger: (messenger) ->
-      console.log "Called"
       @messenger = messenger
 
     toggle: ->
+
         console.log 'QuickDocs was toggled!'
         editor = atom.workspace.getActiveTextEditor()
         editor.selectWordsContainingCursors()
         
-        funx = editor.getSelectedText()
+        fun = editor.getSelectedText()
         range = editor.getSelectedBufferRange()
-
-        if funx?.length
-            console.log funx
-            resp = @get_info(funx, range)
-            
-        else
-            @messages.push @messenger.message
-                range: range
-                text: "Not a PHP function ?"
         
+        if fun?.length && @messages[range.toString()+fun] == undefined
+            @get_info(fun, range)
+        else
+            @messages[range.toString()+fun].destroy()
+            @messages[range.toString()+fun] = undefined
+            
     get_info: (fun, range) ->
+
+      @messages[range.toString()+fun+'get'] = @messenger.message
+          range: range
+          text: "Getting docs..."
 
       resp = { search: fun, is_ok: false, title: '', desc: '', call: ''}
       resp.url = "http://php.net/manual/en/function.#{fun.replace /_/g, '-'}.php"
@@ -52,9 +54,10 @@ module.exports =
       r = request resp.url, (error, response, html) =>
 
         if error or response.statusCode is 404
-
-          resp.desc = "Error: #{error}"
-
+          @messages[range.toString()+fun+'get'].destroy()
+          @messages[range.toString()+fun] = @messenger.message
+              range: range
+              text: "Not a PHP function ?"
         else
 
           $ = cheerio.load(html);
@@ -74,10 +77,9 @@ module.exports =
             resp.is_ok = true
             console.log resp.call
             console.log resp.desc
-             
-            @messages.push @messenger.message
+            
+            @messages[range.toString()+fun+'get'].destroy()
+            @messages[range.toString()+fun] = @messenger.message
                 range: range
                 text: resp.desc
                 suggestion: resp.call
-
-      return [r.call, r.desc]
