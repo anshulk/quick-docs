@@ -8,6 +8,6 @@ Press `ctrl-shift-q` to fetch and display PHP docs and signature for the functio
 
 ### Preview
 
-!['quickdocs.png'](quickdocs.png)
+!['quickdocs.png'](https://raw.githubusercontent.com/anshulk/quick-docs/master/quickdocs.png)
 
  
