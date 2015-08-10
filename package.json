@@ -1,7 +1,7 @@
 {
   "name": "quick-docs",
   "main": "./lib/quick-docs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Atom package to view docs of a function under cursor. PHP for now.",
   "keywords": [],
   "repository": "https://github.com/anshulk/quick-docs",
