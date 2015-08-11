@@ -6,6 +6,8 @@ Combines [inline-messenger](http://atom.io/packages/inline-messenger) and [php-d
 
 Press `ctrl-shift-q` to fetch and display PHP docs and signature for the function under cursor. Quite slow for now, looking for a better method of fetching docs.
 
+Contributions welcome :)
+
 ### Preview
 
 !['quickdocs.png'](https://raw.githubusercontent.com/anshulk/quick-docs/master/quickdocs.png)
