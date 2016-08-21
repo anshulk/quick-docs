@@ -3,17 +3,17 @@
 } = require 'atom'
 
 module.exports =
-    
+
     activate: (state) ->
       atom.commands.add 'atom-text-editor',
         'quick-docs:toggle': (event) =>
           @toggle()
-    
+
       @messenger = null
       @messages = []
       @ranges = []
       @json = require './php.json'
-      
+
     deactivate: ->
       @messages.map (msg) -> msg.destroy()
 
@@ -27,19 +27,21 @@ module.exports =
         console.log 'QuickDocs was toggled!'
         editor = atom.workspace.getActiveTextEditor()
         editor.selectWordsContainingCursors()
-        
+
         fun = editor.getSelectedText()
         range = editor.getSelectedBufferRange()
-        
-        if fun?.length && @messages[range.toString()+fun] == undefined
+
+        if fun?.length > 0 && @messages[range.toString()+fun] == undefined
+            # Function name is not empty and Message does not already exist
             @get_info(fun, range)
-        else
+        else if @messages[range.toString()+fun] != undefined
+            # Message is already displayed, destroy it
             @messages[range.toString()+fun].destroy()
             @messages[range.toString()+fun] = undefined
-            
+
     get_info: (fun, range) ->
-        
-        if @json[fun] == undefined 
+
+        if @json[fun] == undefined
             @messages[range.toString()+fun] = @messenger.message
                     range: range
                     text: 'Not a PHP function ?'
